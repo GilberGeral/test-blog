@@ -54,10 +54,10 @@ class AutorController extends Controller {
       Storage::disk('local')->put($this->autores_folder . $filename, $file->get());
      
     }
-
-    $autor = new Autor();    
+    
+    $autor = new Autor();
     $autor->IdMask = $this->createCode($this->long_mask);
-    $this->createCode($this->long_mask);
+    
     $autor->Nombre = $data['nombre'];
     $autor->email = $data['email'];
     $autor->foto = $filename;
@@ -65,7 +65,7 @@ class AutorController extends Controller {
     $autor->updated_at = $now;
     $autor->created_by = "front";
     $autor->updated_by = "front";    
-    $autor->save();
+    $autor->save();error_log('ccc');
     
     $this->response["code"] = 200;
     $this->response["done"] = true;
@@ -83,6 +83,13 @@ class AutorController extends Controller {
     return response()->json($this->response, 200);
   }
 
+  public function getListSmall(){
+    //carga solo el nombre e id del autor
+    $this->response["data"] = Autor::select( 'IdMask AS Id', 'nombre AS Nombre')->orderByDesc('created_at')->get()->toArray();    
+    $this->response["code"] = 200;
+    $this->response["done"] = true;
+    return response()->json($this->response, 200);
+  }
   
   public function actualizar(Request $request) {
 

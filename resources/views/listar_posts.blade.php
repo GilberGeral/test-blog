@@ -1,26 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de posts</title>
-
-    <style>
-        html, body {
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-       
-    </style>
-
+  @include('prefabs.metas')
+  <link rel="icon" href="/BlogViewer/favicon.ico">
+  <title>test-blog</title>
+  <script defer="defer" src="/BlogViewer/js/chunk-vendors.f2845bf3.js"></script>
+  <script defer="defer" src="/BlogViewer/js/app.7479b822.js"></script>
+  <link href="/BlogViewer/css/chunk-vendors.30118143.css" rel="stylesheet">
+  <link href="/BlogViewer/css/app.57765a0c.css" rel="stylesheet">
 </head>
-<body>
 
-    <h1>A mostrar los posts</h1>
+<body><noscript><strong>We're sorry but test-blog doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
+  <div id="app"></div>
 </body>
+
 </html>

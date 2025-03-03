@@ -3,10 +3,9 @@
 
 <head>
   @include('prefabs.metas')
-  <link rel="icon" href="/VUE/favicon.ico">
   <title>test-blog</title>
   <script defer="defer" src="/VUE/js/chunk-vendors.9f0ebdbf.js"></script>
-  <script defer="defer" src="/VUE/js/app.ecb2a99b.js"></script>
+  <script defer="defer" src="/VUE/js/app.5d8fe7a6.js"></script>
   <link href="/VUE/css/chunk-vendors.77c9f9cb.css" rel="stylesheet">
   <link href="/VUE/css/app.fde1cc4b.css" rel="stylesheet">
 </head>
