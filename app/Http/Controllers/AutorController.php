@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Autor;
+
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -17,8 +18,7 @@ class AutorController extends Controller {
   }
 
   public function crear(Request $request) {
-    $data = $request->all();
-        
+    $data = $request->all();        
     $validator = Validator::make($data, [
       'nombre' => 'required|string|min:3',
       'email' => 'required|email|max:64',
@@ -28,7 +28,7 @@ class AutorController extends Controller {
     if ($validator->fails()) {
       
       $this->response["code"] = 422;
-      $this->response["msg"] = "Error de validación";
+      $this->response["msg"] = "Error de validación (0x78411)";
       $this->response["data"] = $validator->errors();
       return response()->json($this->response, 422);
     }
@@ -44,28 +44,26 @@ class AutorController extends Controller {
     $now = Carbon::now($this->time_zone);
     $filename = $this->default_image;
    
-    if ($request->hasFile('foto')) {
-      
+    if ($request->hasFile('foto')) {      
       $file = $request->file('foto');
       $extension = $file->getClientOriginalExtension();
       $filename = $this->createCode(8);
       $filename .= ".";
-      $filename .= $extension;      
-      Storage::disk('local')->put($this->autores_folder . $filename, $file->get());
-     
+      $filename .= $extension;   
+      Storage::disk('local')->put($this->autores_folder . $filename, $file->get());     
     }
     
     $autor = new Autor();
-    $autor->IdMask = $this->createCode($this->long_mask);
-    
+    $autor->IdMask = $this->createCode($this->long_mask);    
     $autor->Nombre = $data['nombre'];
     $autor->email = $data['email'];
     $autor->foto = $filename;
     $autor->created_at = $now;
     $autor->updated_at = $now;
     $autor->created_by = "front";
-    $autor->updated_by = "front";    
-    $autor->save();error_log('ccc');
+    $autor->updated_by = "front"; 
+       
+    $autor->save();
     
     $this->response["code"] = 200;
     $this->response["done"] = true;
@@ -77,7 +75,7 @@ class AutorController extends Controller {
   public function getList(){
     
     $this->response["data"] = Autor::select( 'IdMask AS Id', 'nombre', 'email','foto', 'created_at')->orderByDesc('created_at')->get()->toArray();
-    // dd($this->response["data"]);
+    
     $this->response["code"] = 200;
     $this->response["done"] = true;
     return response()->json($this->response, 200);
@@ -93,8 +91,7 @@ class AutorController extends Controller {
   
   public function actualizar(Request $request) {
 
-    $data = $request->all();
-    
+    $data = $request->all();    
     $validator = Validator::make($data, [
       'id' => 'required|string|size:16',
       'nombre' => 'required|string|min:3',
@@ -121,8 +118,8 @@ class AutorController extends Controller {
     $now = Carbon::now($this->time_zone);
     $old_foto = $autor->foto;//para borrar la foto antigua
     $filename = "";
-   
-    if ($request->hasFile('foto')) {
+    
+    if ($request->hasFile('foto')){
       
       $file = $request->file('foto');
       $extension = $file->getClientOriginalExtension();
@@ -130,7 +127,7 @@ class AutorController extends Controller {
       $filename .= ".";
       $filename .= $extension;      
       Storage::disk('local')->put($this->autores_folder . $filename, $file->get());
-     
+      
     }
       
     
@@ -171,9 +168,15 @@ class AutorController extends Controller {
 
     $autor = Autor::where(['IdMask' => $request->id])->first();
     if ($autor == null) {
-      $this->response["code"] = 409;
+      $this->response["code"] = 404;
       $this->response["msg"] = "No existe el autor. ";
-      return response()->json($this->response, 409);
+      return response()->json($this->response, 404);
+    }
+
+    if( $autor->countPosts() > 0 ){
+      $this->response["code"] = 409;
+      $this->response["msg"] = "El autor tiene posts asociados, no se puede borrar";
+      return response()->json($this->response, 409);    
     }
 
     if( $autor->foto != $this->default_image ){

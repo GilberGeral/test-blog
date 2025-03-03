@@ -35,5 +35,9 @@ class Autor extends Model {
   public function posts() {
     return $this->hasMany(Post::class, 'IdAutor', 'IdAutor');
   }
+
+  public function countPosts(){
+    return $this->posts()->count();
+  }
   
 }//fin de la clase
